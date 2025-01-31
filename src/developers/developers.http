@@ -1,0 +1,11 @@
+### list all developers
+GET http://localhost:3000/developers
+
+### get a developer by id
+GET http://localhost:3000/developers/3
+
+### create a developer
+POST http://localhost:3000/developers
+
+### Patch a developer
+PATCH http://localhost:3000/developers/3
