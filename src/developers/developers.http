@@ -6,6 +6,18 @@ GET http://localhost:3000/developers/3
 
 ### create a developer
 POST http://localhost:3000/developers
+Content-Type: application/json
+
+{
+    "name": "John Doe",
+    "email": "john.doe@example.com",
+    "dateOfBirth": "1990-01-01"
+}
 
 ### Patch a developer
 PATCH http://localhost:3000/developers/3
+Content-Type: application/json
+
+{
+    "name": "John Doe3"
+}
