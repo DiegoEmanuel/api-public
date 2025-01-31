@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateDeveloperDto } from './dto/create-developer.dto';
 import { UpdateDeveloperDto } from './dto/update-developer.dto';
 import { Repository } from 'typeorm';
@@ -29,9 +29,20 @@ export class DevelopersService {
   }
 
 
-  update(id: string, updateDeveloperDto: UpdateDeveloperDto) {
-    return this.repository.update(id, updateDeveloperDto);
+  async update(id: string, updateDeveloperDto: UpdateDeveloperDto) {
+    const developer = await this.repository.findOne({
+      where: { id }
+    })
+
+    if (!developer) {
+      throw new NotFoundException('Developer not found');
+    }
+
+    this.repository.merge(developer, updateDeveloperDto); // o merge é para atualizar o developer com os dados do updateDeveloperDto
+    return this.repository.save(developer);
   }
+
+
 
 
   remove(id: string) {
