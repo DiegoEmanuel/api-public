@@ -1,6 +1,6 @@
 import { BeforeInsert, Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { nanoid } from 'nanoid';
 
-const nanoid = require('nanoid');
 @Entity('developers')
 export class Developer {
     @PrimaryColumn()

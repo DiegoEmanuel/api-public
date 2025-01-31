@@ -45,8 +45,16 @@ export class DevelopersService {
 
 
 
-  remove(id: string) {
-    return this.repository.delete(id);
+  async remove(id: string) {
+    const developer = await this.repository.findOne({
+      where: { id }
+    })
+
+    if (!developer) {
+      throw new NotFoundException('Developer not found');
+    }
+
+    await this.repository.delete(id);
   }
 
 }
