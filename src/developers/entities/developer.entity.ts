@@ -1,27 +1,76 @@
-import { BeforeInsert, Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, Column, Entity, PrimaryColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { nanoid } from 'nanoid';
+import { TypesOfSpeciality } from "../dto/create-developer.dto";
 
 @Entity('developers')
 export class Developer {
     @PrimaryColumn()
-    id: string; //esse vai ser o id do desenvolvedor
-
-
+    id: string;
 
     @Column()
-    name: string; //esse vai ser o nome do desenvolvedor
+    name: string;
 
     @Column()
-    email: string; //esse vai ser o email do desenvolvedor
-
+    email: string;
 
     @Column()
-    dateOfBirth: string; //esse vai ser a data de nascimento do desenvolvedor
+    dateOfBirth: string;
+
+    @Column()
+    speciality: TypesOfSpeciality;
+
+    @CreateDateColumn()
+    createdAt: Date;
 
 
-    @BeforeInsert()    
+    @UpdateDateColumn()
+    updatedAt: Date;
+
+    @BeforeInsert()
     generateId() {
         this.id = `dev_${nanoid()}`;
     }
 
+    getName(): string {
+        return this.name;
+    }
+
+
+    setName(name: string) {
+        this.name = name;
+    }
+
+    getEmail(): string {
+        return this.email;
+    }
+
+    setEmail(email: string) {
+        this.email = email;
+    }
+
+    getDateOfBirth(): string {
+        return this.dateOfBirth;
+    }
+
+    setDateOfBirth(dateOfBirth: string) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    getSpeciality(): string {
+        return this.speciality;
+    }
+
+    setSpeciality(speciality: TypesOfSpeciality) {
+        this.speciality = speciality;
+    }
+
+
+    getCreatedAt(): Date {
+        return this.createdAt;
+    }
+
+    getUpdatedAt(): Date {
+        return this.updatedAt;
+    }
 }
+

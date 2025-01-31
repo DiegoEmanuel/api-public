@@ -1,60 +1,63 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateDeveloperDto } from './dto/create-developer.dto';
 import { UpdateDeveloperDto } from './dto/update-developer.dto';
-import { Repository } from 'typeorm';
 import { Developer } from './entities/developer.entity';
-import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class DevelopersService {
   constructor(
     @InjectRepository(Developer)
-    private readonly repository: Repository<Developer>
+    private developersRepository: Repository<Developer>,
   ) {}
 
-  create(createDeveloperDto: CreateDeveloperDto) {
-    const developer = this.repository.create(createDeveloperDto);
-    return this.repository.save(developer);
+  async create(createDeveloperDto: CreateDeveloperDto) {
+    const developer = new Developer();
+    developer.setName(createDeveloperDto.name);
+    developer.setEmail(createDeveloperDto.email);
+    developer.setDateOfBirth(createDeveloperDto.dateOfBirth);
+    developer.setSpeciality(createDeveloperDto.speciality);
+
+    return await this.developersRepository.save(developer);
   }
-
-
 
   findAll() {
-    return this.repository.find();
+    return this.developersRepository.find();
   }
-
 
   findOne(id: string) {
-    return this.repository.findOne({ where: { id } });
+    return this.developersRepository.findOneBy({ id });
   }
-
 
   async update(id: string, updateDeveloperDto: UpdateDeveloperDto) {
-    const developer = await this.repository.findOne({
-      where: { id }
-    })
-
+    const developer = await this.findOne(id);
     if (!developer) {
-      throw new NotFoundException('Developer not found');
+      return null;
     }
 
-    this.repository.merge(developer, updateDeveloperDto); // o merge é para atualizar o developer com os dados do updateDeveloperDto
-    return this.repository.save(developer);
+    if (updateDeveloperDto.name) {
+      developer.setName(updateDeveloperDto.name);
+    }
+    if (updateDeveloperDto.email) {
+      developer.setEmail(updateDeveloperDto.email);
+    }
+    if (updateDeveloperDto.dateOfBirth) {
+      developer.setDateOfBirth(updateDeveloperDto.dateOfBirth);
+    }
+    if (updateDeveloperDto.speciality) {
+      developer.setSpeciality(updateDeveloperDto.speciality);
+    }
+
+    return await this.developersRepository.save(developer);
   }
-
-
-
 
   async remove(id: string) {
-    const developer = await this.repository.findOne({
-      where: { id }
-    })
-
-    if (!developer) {
-      throw new NotFoundException('Developer not found');
+    const developer = await this.findOne(id);
+    if (developer) {
+      await this.developersRepository.remove(developer);
+      return true;
     }
-
-    await this.repository.delete(id);
+    return false;
   }
-
 }

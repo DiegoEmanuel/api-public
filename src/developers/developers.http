@@ -16,9 +16,13 @@ Content-Type: application/json
 }
 
 ### Patch a developer
-PATCH http://localhost:3001/developers/3
+PATCH http://localhost:3001/developers/dev_5bVeg2N1IsEaII3lcMjJ8
 Content-Type: application/json
 
 {
-    "name": "John Doe3"
+    "name": "John teste"
 }
+
+### Delete a developer
+DELETE http://localhost:3001/developers/22
+

@@ -1,4 +1,11 @@
-import { IsString, IsEmail, IsDateString } from 'class-validator';
+import { IsString, IsEmail, IsDateString, IsEnum } from 'class-validator';
+
+
+export enum TypesOfSpeciality {
+    FRONTEND = 'frontend',
+    BACKEND = 'backend',
+    FULLSTACK = 'fullstack',
+}
 
 export class CreateDeveloperDto {
     @IsString()
@@ -7,4 +14,7 @@ export class CreateDeveloperDto {
     email: string;
     @IsDateString()
     dateOfBirth: string;
+    @IsEnum(TypesOfSpeciality)
+    speciality: TypesOfSpeciality;
+
 }
